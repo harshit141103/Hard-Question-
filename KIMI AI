@@ -1,40 +1,97 @@
-Here is the step-by-step solution:
+"""
+Step-by-Step Solution: Microstrip TE Transverse Resonance Frequency
 
-**Step 1: Identify the given parameters**
-*   Physical strip width: $W = 2.1\text{ mm} = 2.1 \times 10^{-3}\text{ m}$
-*   Substrate thickness: $h = 1.0\text{ mm} = 1.0 \times 10^{-3}\text{ m}$
-*   Relative permittivity: $\varepsilon_r = 9$
-*   Speed of light: $c = 3 \times 10^8\text{ m/s}$
+Problem Analysis:
+- This is a transverse resonance problem in microstrip lines
+- At high frequencies, the microstrip width W acts like a parallel-plate waveguide
+- The lowest order TE mode resonates when the effective width equals λg/2
+- Fringing fields increase the effective electrical width beyond the physical width W
+"""
 
-**Step 2: Determine the effective width ($W_{eff}$)**
-For wide microstrip lines where $W/h > 1$ (here $2.1/1.0 = 2.1 > 1$), electromagnetic fringing fields extend beyond the physical edges of the strip. This increases the effective electrical width. The standard approximation accounting for fringing capacitance is:
-$$W_{eff} = W + 0.4h$$
+import math
 
-Substituting the values:
-$$W_{eff} = 2.1\text{ mm} + 0.4(1.0\text{ mm}) = 2.5\text{ mm} = 2.5 \times 10^{-3}\text{ m}$$
+# Step 1: Identify and define the given parameters
+W = 2.1e-3       # Strip width = 2.1 mm (converted to meters)
+h = 1.0e-3       # Substrate thickness = 1.0 mm (converted to meters)
+epsilon_r = 9.0  # Substrate relative permittivity
+c = 3e8          # Speed of light in vacuum (m/s)
 
-**Step 3: Apply the transverse resonance condition**
-The lowest-order TE transverse resonance occurs when the effective width equals half the guided wavelength ($\lambda_g$):
-$$W_{eff} = \frac{\lambda_g}{2}$$
+print("Step 1: Given Parameters")
+print(f"  - Strip width (W) = {W*1000:.1f} mm")
+print(f"  - Substrate thickness (h) = {h*1000:.1f} mm")
+print(f"  - Relative permittivity (εr) = {epsilon_r}")
+print(f"  - W/h ratio = {W/h:.1f} (>1, so wide microstrip approximation applies)")
+print()
 
-The guided wavelength is related to the free-space wavelength $\lambda_0$ by $\lambda_g = \frac{\lambda_0}{\sqrt{\varepsilon_r}} = \frac{c}{f\sqrt{\varepsilon_r}}$.
+# Step 2: Calculate effective width accounting for fringing capacitance
+# For wide microstrip lines (W/h > 1), fringing extends approximately 
+# 0.2h on each side, giving total extension of 0.4h
+# Formula: Weff = W + 0.4h
 
-Substituting this into the resonance condition:
-$$W_{eff} = \frac{c}{2f\sqrt{\varepsilon_r}}$$
+fringe_extension = 0.4 * h
+W_eff = W + fringe_extension
 
-**Step 4: Solve for the resonance frequency ($f$)**
-Rearranging the formula to solve for $f$:
-$$f = \frac{c}{2 \cdot W_{eff} \cdot \sqrt{\varepsilon_r}}$$
+print("Step 2: Effective Width Calculation (including fringing)")
+print(f"  - Fringing extension = 0.4h = {fringe_extension*1000:.2f} mm")
+print(f"  - Physical width W = {W*1000:.1f} mm")
+print(f"  - Effective width Weff = W + 0.4h = {W*1000:.1f} + {fringe_extension*1000:.2f} = {W_eff*1000:.2f} mm")
+print()
 
-Substitute the numerical values:
-$$f = \frac{3 \times 10^8}{2 \times (2.5 \times 10^{-3}) \times \sqrt{9}}$$
+# Step 3: Apply transverse resonance condition
+# For the lowest order TE mode, resonance occurs when:
+# Weff = λg/2 = λ0/(2√εr) = c/(2f√εr)
+# Solving for f: f = c/(2*Weff*√εr)
 
-$$f = \frac{3 \times 10^8}{2 \times 2.5 \times 10^{-3} \times 3}$$
+print("Step 3: Transverse Resonance Condition")
+print("  - Lowest order TE mode condition: Weff = λg/2")
+print("  - Guided wavelength λg = λ0/√εr = c/(f√εr)")
+print("  - Therefore: f = c/(2*Weff*√εr)")
+print()
 
-$$f = \frac{3 \times 10^8}{15 \times 10^{-3}}$$
+# Step 4: Calculate the resonance frequency
+sqrt_epsilon_r = math.sqrt(epsilon_r)
+f_resonance = c / (2 * W_eff * sqrt_epsilon_r)
+f_resonance_GHz = f_resonance / 1e9
 
-$$f = \frac{3}{15} \times 10^{11} = 0.2 \times 10^{11} = 20 \times 10^9\text{ Hz}$$
+print("Step 4: Calculate Resonance Frequency")
+print(f"  - √εr = √{epsilon_r} = {sqrt_epsilon_r}")
+print(f"  - f = c / (2 * Weff * √εr)")
+print(f"  - f = {c:.0e} / (2 * {W_eff:.3e} * {sqrt_epsilon_r})")
+print(f"  - f = {f_resonance_GHz:.1f} GHz")
+print()
 
-$$f = \mathbf{20\text{ GHz}}$$
+# Step 5: Compare with given options
+options = {
+    'a': 10,
+    'b': 20,
+    'c': 25,
+    'd': 30
+}
 
-**Answer:** The correct option is **(b) 20 GHz**.
+print("Step 5: Match with Given Options")
+print(f"  - Calculated value: {f_resonance_GHz:.1f} GHz")
+print(f"  - Option (a): {options['a']} GHz")
+print(f"  - Option (b): {options['b']} GHz  ← Closest match (exact)")
+print(f"  - Option (c): {options['c']} GHz")
+print(f"  - Option (d): {options['d']} GHz")
+print()
+
+# Verification: Calculate what Weff would be for other options
+print("Verification:")
+for label, freq in options.items():
+    weff_for_freq = c / (2 * freq * 1e9 * sqrt_epsilon_r)
+    print(f"  - For {freq} GHz, required Weff = {weff_for_freq*1000:.2f} mm")
+
+print()
+print("="*60)
+print("CONCLUSION: The answer is (b) 20 GHz")
+print("="*60)
+print("""
+Physics Explanation:
+The TE transverse resonance occurs when electromagnetic waves bounce 
+between the edges of the microstrip (acting like a parallel-plate 
+waveguide). The fringing fields at the edges increase the effective 
+electrical width to approximately Weff = W + 0.4h = 2.5 mm, lowering 
+the resonant frequency from the ideal 23.8 GHz (without fringing) 
+to exactly 20 GHz.
+""")
